@@ -123,6 +123,7 @@ def new_project():
         end_date = request.form.get("end_date")
         top_file = request.files.get("top_file")  # 修正: request.form.get -> request.files.get
         sub_files = request.files.getlist("sub_file")  # 修正: request.form.getlist -> request.files.getlist
+        project_detail = request.form.get("project_detail")
         
         print(project_name)
         print(goal)
@@ -175,12 +176,13 @@ def new_project():
                         sub_img1 VARCHAR(255),
                         sub_img2 VARCHAR(255),
                         sub_img3 VARCHAR(255),
-                        sub_img4 VARCHAR(255)
+                        sub_img4 VARCHAR(255),
+                        project_detail VARCHAR(500)
                     )
                     """)
         
-        cur.execute("INSERT INTO project (user_id,project_name,goal,end_date,top_img,sub_img1,sub_img2,sub_img3,sub_img4) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-                    (1, project_name, goal, end_date, file_save["top_file"], file_save["sub_file"][0], file_save["sub_file"][1], file_save["sub_file"][2], file_save["sub_file"][3]))
+        cur.execute("INSERT INTO project (user_id,project_name,goal,end_date,top_img,sub_img1,sub_img2,sub_img3,sub_img4,project_detail) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                    (1, project_name, goal, end_date, file_save["top_file"], file_save["sub_file"][0], file_save["sub_file"][1], file_save["sub_file"][2], file_save["sub_file"][3], project_detail))
         
         conn.commit()
         

@@ -25,11 +25,17 @@ main article .new_project h1 {
     margin: 0 auto;
 } */
 
-main article .new_project form input {
+main article form .new_project input {
     display: flex;
     height: 5vh;
     width: 100%;
     font-size: 1.1vw;
+}
+
+main article form .new_project #project_detail {
+    width: 100%;
+    height: 30vh;
+    font-size: 1.2vw;
 }
 
 main article .project_title {
@@ -120,5 +126,4 @@ main article section .detail h1 {
 
 main article section .detail .objective span{
     margin-right: 2vw;
-    
 }
