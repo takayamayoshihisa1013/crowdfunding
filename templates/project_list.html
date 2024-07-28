@@ -11,13 +11,61 @@
     <article>
         <section class="now_project">
             <!-- <h2 class="section_title"></h2> -->
-            <form action="">
+            <form action="/project">
                 <div id="search">
                     <input type="text" placeholder="検索したいキーワード、またはタグを入力してください" name="search">
                     <button type="submit" name="search_button" value="search_project" formaction="/project_list">検索</button>
                 </div>
-                
+            </form>
+            <form>
+                {% for project in project_data %}
 
+                {% if loop.index0 % 4 == 0 %}
+                <div class="project_row">
+                {% endif %}
+                    <div class="project">
+                        <button type="submit" class="project_select" value="{{project.6}}" formaction="/project/{{ project.6 }}"></button>
+                        <div class="project_image">
+                            <img src="static/images/project_img/{{ project.3 }}" alt="">
+                        </div>
+                        <div class="company">
+                            <h3>{{ project.0 }}</h3>
+                        </div>
+                        <div class="tag">
+                            <p><i class="fa-solid fa-tag"></i><button>環境</button></p>
+                        </div>
+                        <div class="bar">
+                            <div class="bar_back">
+                                <div class="bar_save"></div>
+                            </div>
+                            <h3>80%</h3>
+                        </div>
+                        <div class="project_title">
+                            <h3>{{ project.1 }}</h3>
+                        </div>
+                        
+                        <div class="project_detail">
+                            <div class="now_money">
+                                <h4>金額</h4>
+                                <h3>￥{{ project.4 }}</h3>
+                            </div>
+                            <div class="people">
+                                <h4>人数</h4>
+                                <h3>{{ project.5 }}人</h3>
+                            </div>
+                            <div>
+                                <h4>日数</h4>
+                                <h3>34日</h3>
+                            </div>
+                        </div>
+                        
+                        
+                    </div>
+                {% if loop.index0 % 4 == 3 or loop.last %}
+                </div>
+                {% endif %}
+                {% endfor %}
+                </form>
 
                 <div class="project_row">
                     <div class="project">
@@ -623,8 +671,12 @@
                     </div>
                     <!-- 目標金額を分割してその金額まででできることをライブするさいとにする -->
                 </div>
-            </form>
+            
         </section>
     </article>
 </main>
+{% endblock %}
+
+{% block javascript %}
+<script src="static/js/project.js"></script>
 {% endblock %}

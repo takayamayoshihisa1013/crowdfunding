@@ -2,6 +2,7 @@ from flask import Flask, render_template, redirect, session, request
 import mysql.connector
 import os
 from werkzeug.utils import secure_filename
+from datetime import datetime, timedelta, date
 
 app = Flask(__name__)
 
@@ -20,12 +21,59 @@ def top():
 @app.route("/project_list")
 def project_list():
     session["before_page"] = "/project_list"
-    return render_template("project_list.html")
+    
+    conn = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="crowdfundingsite"
+        )
+    
+    cur = conn.cursor()
+    
+    cur.execute("""
+                SELECT user_name, project_name, goal, top_img,fund_money, support, project_id
+                FROM project
+                INNER JOIN user ON user.id = project.user_id
+                """)
+    
+    project_data = cur.fetchall()
+    
+    print(project_data)
+    
+    return render_template("project_list.html", project_data = project_data)
 
-@app.route("/project")
-def project():
+@app.route("/project/<int:number>")
+def project(number):
     session["before_page"] = "/project"
-    return render_template("project.html")
+    
+    print(number)
+    
+    conn = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="crowdfundingsite"
+        )
+    
+    cur = conn.cursor()
+    
+    today = date.today()
+    
+    cur.execute("""
+                SELECT *
+                FROM project
+                INNER JOIN user ON project.user_id = user.id
+                WHERE project_id = %s
+                """, (number,))
+    
+    project_data = cur.fetchone()
+    
+    time_limit = (project_data[4] - today).days
+    
+    print(project_data)
+    
+    return render_template("project.html", project_data = project_data, time_limit = time_limit)
 
 @app.route("/login", methods=["GET","POST"])
 def login():
@@ -121,41 +169,50 @@ def new_project():
         project_name = request.form.get("project_name")
         goal = request.form.get("goal")
         end_date = request.form.get("end_date")
-        top_file = request.files.get("top_file")  # 修正: request.form.get -> request.files.get
-        sub_files = request.files.getlist("sub_file")  # 修正: request.form.getlist -> request.files.getlist
+        top_file = request.files.get("top_file")
+        sub_files = request.files.getlist("sub_file")
         project_detail = request.form.get("project_detail")
-        
+
         print(project_name)
         print(goal)
         print(end_date)
         print(top_file)
         print(sub_files)
         
-        
         app.config["UPLOAD_FOLDER"] = "static/images/project_img"
-        
+
         if not os.path.exists(app.config["UPLOAD_FOLDER"]):
             os.makedirs(app.config["UPLOAD_FOLDER"])
-            
-        file_save = {}
         
+        # 初期値の設定
+        top_file_default = "default_top.png"
+        sub_file_defaults = ["default_sub1.png", "default_sub2.png", "default_sub3.png", "default_sub4.png"]
+        
+        file_save = {}
+
+        # トップファイルの保存
         if top_file and allowed_file(top_file.filename):
             filename = secure_filename(top_file.filename)
-            file_save["top_file"] = filename
             top_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        
-        sub_file_li = []
-        for sub_file in sub_files:
-            if sub_file and allowed_file(sub_file.filename):
-                filename = secure_filename(sub_file.filename)
-                sub_file_li.append(filename)
-                sub_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            file_save["top_file"] = filename
+            print("ほぞん")
+        else:
+            file_save["top_file"] = top_file_default
 
-                print(filename, "filename")
-        
+        # サブファイルの保存
+        sub_file_li = []
+        for i in range(4):
+            if i < len(sub_files) and sub_files[i] and allowed_file(sub_files[i].filename):
+                filename = secure_filename(sub_files[i].filename)
+                sub_files[i].save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                sub_file_li.append(filename)
+            else:
+                sub_file_li.append(sub_file_defaults[i])
+
         file_save["sub_file"] = sub_file_li
         
         print(file_save)
+
         
         conn = mysql.connector.connect(
             host="localhost",
@@ -168,6 +225,7 @@ def new_project():
         
         cur.execute("""
                     CREATE TABLE IF NOT EXISTS project (
+                        project_id INT AUTO_INCREMENT PRIMARY KEY,
                         user_id INT,
                         project_name VARCHAR(255),
                         goal INT,
@@ -177,12 +235,20 @@ def new_project():
                         sub_img2 VARCHAR(255),
                         sub_img3 VARCHAR(255),
                         sub_img4 VARCHAR(255),
-                        project_detail VARCHAR(500)
+                        project_detail VARCHAR(500),
+                        fund_money INT DEFAULT 0,
+                        support INT DEFAULT 0
                     )
                     """)
         
-        cur.execute("INSERT INTO project (user_id,project_name,goal,end_date,top_img,sub_img1,sub_img2,sub_img3,sub_img4,project_detail) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-                    (1, project_name, goal, end_date, file_save["top_file"], file_save["sub_file"][0], file_save["sub_file"][1], file_save["sub_file"][2], file_save["sub_file"][3], project_detail))
+        cur.execute("""
+                    INSERT INTO project 
+                    (user_id, project_name, goal, end_date, top_img, sub_img1, sub_img2, sub_img3, sub_img4, project_detail, fund_money) 
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    """, 
+                    (1, project_name, goal, end_date, file_save["top_file"], 
+                     file_save["sub_file"][0], file_save["sub_file"][1], 
+                     file_save["sub_file"][2], file_save["sub_file"][3], project_detail, 0))
         
         conn.commit()
         

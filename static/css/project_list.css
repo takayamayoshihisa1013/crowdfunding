@@ -46,6 +46,23 @@ main article .now_project .project_row .project {
     border-radius: 10px;
     padding: 1%;
     box-shadow: 2px 2px 0.5vw gray;
+    position: relative;
+}
+
+main article .now_project .project_row .project .project_select {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    top: 0;
+    left: 0;
+    border-radius: 10px;
+    transition: 0.4s;
+}
+
+main article .now_project .project_row .project .project_select:hover {
+    background-color: rgba(105,105,105,0.5);
 }
 
 main article .now_project .project_row .project .project_image {
@@ -89,6 +106,10 @@ main article .now_project .project_row .project .project_title {
     margin: 1vh 0;
     line-height: 3vh;
     display:block;
+    /* white-space: nowrap; */
+    /* overflow: hidden; */
+    text-overflow: ellipsis;
+    max-height: 100%;
 }
 
 main article .now_project .project_row .project .bar {

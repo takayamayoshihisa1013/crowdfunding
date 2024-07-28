@@ -92,3 +92,22 @@ main article section .detail .objective span{
     margin-right: 2vw;
     
 }
+
+main article section .detail button {
+    background-color: #ff4500;
+    width: 25vw;
+    height: 8vh;
+    margin: 0 auto;
+    display: block;
+    border: none;
+    margin-top: 10vh;
+    color: #FFFF;
+    border-radius: 10px;
+    transition: 0.4s;
+    font-size: 1vw;
+}
+
+main article section .detail button:hover {
+    transform: scale(1.1,1.1);
+    font-size: 1.1vw;
+}
