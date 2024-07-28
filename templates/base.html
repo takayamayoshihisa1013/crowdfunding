@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang=ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="static/css/base.css">
+    {% block css %}{% endblock %}
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <div id="logo">
+            <h1>FUNDLIVE</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/">ホーム</a></li>
+                <li><a href="/project_list">プロジェクト</a></li>
+                <li><a href="/new_project">始める</a></li>
+                <li><a href="/login">ログイン</a></li>
+            </ul>
+        </nav>
+    </header>
+    {% block main %}
+    
+    {% endblock %}
+    {% block javascript %}
+    
+    {% endblock %}
+</body>
+</html>

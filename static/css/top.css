@@ -1,0 +1,144 @@
+
+main article .preview {
+    width: 100%;
+    height: 87vh;
+    background-color: gray;
+}
+
+.slider .slick-slide {
+    height: 87vh;
+    width: 100%;
+}
+
+
+
+/* 矢印の大きさ */
+.slick-arrow{z-index:2!important;width:60px!important;height:60px!important;}
+/* 矢印の位置 */
+.slick-next{right:-30px!important;}
+.slick-prev{left:-30px!important;}
+
+
+main article .now_project {
+    width: 90%;
+    margin: 0 auto;
+    /* background-color: aquamarine; */
+    padding: 5vh 0;
+    
+}
+
+main article .now_project .section_title {
+    text-align: center;
+    font-size: 1.8vw;
+    display: block;
+    height: 5vh;
+    line-height: 5vh;
+    margin: 3vh 0;
+    font-family:"Yu Gothic", "游ゴシック", YuGothic, "游ゴシック体";
+} 
+
+main article .now_project .project_row {
+    width: 100%;
+    justify-content: space-around;
+    display: flex;
+}
+
+main article .now_project .project_row .project {
+    height: 53vh;
+    width: 18vw;
+    background-color: #FFFF;
+    border-radius: 10px;
+    padding: 1%;
+    box-shadow: 2px 2px 0.5vw gray;
+}
+
+main article .now_project .project_row .project .project_image {
+    height:28vh;
+    width: 100%;
+    
+}
+
+main article .now_project .project_row .project .project_image img {
+    display: block;
+    max-width: 100%;
+    height: 100%;
+}
+
+main article .now_project .project_row .project .company {
+    height: 3vh;
+    font-size: 0.8vw;
+    line-height: 3vh;
+    color: blue;
+    margin: 0.5vh 0;
+}
+
+main article .now_project .project_row .project .tag {
+
+}
+
+main article .now_project .project_row .project .tag button {
+   background-color: aqua;
+    /* display: block; */
+    height: 3vh;
+    padding: 0 1%;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.8vw;
+}
+
+main article .now_project .project_row .project .project_title {
+    width: 100%;
+    font-size: 0.9vw;
+    height: 6vh;
+    margin: 1vh 0;
+    line-height: 3vh;
+    display:block;
+}
+
+main article .now_project .project_row .project .bar {
+    width: 100%;
+    height: 3vh;
+    margin: 0 auto;
+}
+
+main article .now_project .project_row .project .bar .bar_back {
+    width: 100%;
+    height: 1vh;
+    background-color: antiquewhite;
+    border-radius: 0.5vh;
+    margin: 0.25vh 0;
+}
+
+main article .now_project .project_row .project .bar .bar_back .bar_save {
+    width: 80%;
+    background-color: greenyellow;
+    height: 100%;
+    border-radius: 0.5vh;
+}
+
+main article .now_project .project_row .project .bar h3 {
+    height: 1.5vh;
+    text-align: center;
+    font-size: 0.9vw;
+}
+
+main article .now_project .project_row .project .project_detail {
+    height: 4vh;
+    display: flex;
+}
+
+main article .now_project .project_row .project .project_detail div {
+    width: 100%;
+    text-align: center;
+}
+
+main article .now_project .project_row .project .project_detail div h3 {
+    font-size: 1.0vw;
+    font-weight: 600;
+    line-height: 2vh;
+}
+
+main article .now_project .project_row .project .project_detail div h4 {
+    font-size: 0.9vw;
+    font-weight: 300;
+}

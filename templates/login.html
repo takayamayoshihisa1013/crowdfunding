@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/css/login.css">
+    <title>ログイン</title>
+</head>
+<body>
+    <form>
+        <h1>FUNDLIVE</h1>
+        <div class="input_form">
+            <h2>メールアドレス</h2>
+            {% if error %}
+                <h3>{{ error }}</h3>
+            {% endif %}
+            <input type="email" name="email">
+            <h2>パスワード</h2>
+            {% if error %}
+                <h3>{{ error }}</h3>
+            {% endif %}
+            <input type="password" name="password">
+        </div>
+        <div class="button_form">
+            <button formaction="/login" formmethod="post">ログイン</button>
+            <button formaction="/sign_up" type="submit">サインアップ</button>
+        </div>
+    </form>
+    
+    
+</body>
+</html>

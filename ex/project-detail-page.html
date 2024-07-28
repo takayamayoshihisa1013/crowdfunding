@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>エコバッグ革命 - プロジェクト詳細 | FUNDWAVE</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --background-color: #f8f9fa;
+            --text-color: #333;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        nav ul {
+            list-style-type: none;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 2rem;
+        }
+
+        nav ul li a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary-color);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+            padding: 6rem 0 4rem;
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+        }
+
+        .project-title {
+            flex: 1;
+        }
+
+        .project-title h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-category {
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: inline-block;
+        }
+
+        .project-creator {
+            display: flex;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .project-creator img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 1rem;
+        }
+
+        .support-button {
+            background-color: var(--secondary-color);
+            color: #fff;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .support-button:hover {
+            background-color: #27ae60;
+        }
+
+        .project-media {
+            margin-bottom: 2rem;
+        }
+
+        .project-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .project-info {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .project-description {
+            flex: 2;
+            margin-right: 2rem;
+        }
+
+        .project-stats {
+            flex: 1;
+            background-color: #fff;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .progress-bar {
+            width: 100%;
+            background-color: #e0e0e0;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: var(--secondary-color);
+            width: 75%;
+        }
+
+        .stat {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .rewards {
+            margin-top: 2rem;
+        }
+
+        .reward-card {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .reward-card h3 {
+            margin-top: 0;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 4rem;
+        }
+
+        .social-links {
+            margin-bottom: 1rem;
+        }
+
+        .social-links a {
+            color: #fff;
+            font-size: 1.5rem;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .project-header {
+                flex-direction: column;
+            }
+
+            .support-button {
+                margin-top: 1rem;
+            }
+
+            .project-info {
+                flex-direction: column;
+            }
+
+            .project-description {
+                margin-right: 0;
+                margin-bottom: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">FUNDWAVE</div>
+            <ul>
+                <li><a href="#home">ホーム</a></li>
+                <li><a href="#projects">プロジェクト</a></li>
+                <li><a href="#start">始める</a></li>
+                <li><a href="#login">ログイン</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="project-header">
+            <div class="project-title">
+                <h1>エコバッグ革命</h1>
+                <span class="project-category">環境・エコ</span>
+                <div class="project-creator">
+                    <img src="/api/placeholder/100/100" alt="プロジェクト作成者">
+                    <span>山田太郎</span>
+                </div>
+            </div>
+            <button class="support-button">このプロジェクトを支援する</button>
+        </div>
+
+        <div class="project-media">
+            <img src="/api/placeholder/1200/400" alt="エコバッグ革命プロジェクト" class="project-image">
+        </div>
+
+        <div class="project-info">
+            <div class="project-description">
+                <h2>プロジェクト概要</h2>
+                <p>「エコバッグ革命」は、環境に優しく、多機能でスタイリッシュなエコバッグを開発するプロジェクトです。従来のエコバッグの概念を覆し、日常生活のあらゆるシーンで活用できる革新的な製品を目指しています。</p>
+                <p>私たちのエコバッグは、耐久性の高い再生素材を使用し、折りたたみ時はコンパクトになるため、どこにでも持ち運びやすいデザインになっています。さらに、内部には複数の仕切りポケットを設け、小物の整理整頓も簡単に行えます。</p>
+                <h2>このプロジェクトの目標</h2>
+                <ul>
+                    <li>環境負荷の少ない素材を使用したエコバッグの開発</li>
+                    <li>多機能性と使いやすさを兼ね備えたデザインの実現</li>
+                    <li>量産体制の構築と品質管理システムの確立</li>
+                    <li>エコバッグ使用の啓発活動と環境保護への貢献</li>
+                </ul>
+                <p>皆様のご支援により、このプロジェクトを実現し、持続可能な社会の構築に貢献していきたいと考えています。</p>
+            </div>
+            <div class="project-stats">
+                <h2>プロジェクトの状況</h2>
+                <div class="progress-bar">
+                    <div class="progress"></div>
+                </div>
+                <div class="stat">
+                    <span>目標金額</span>
+                    <span>¥5,000,000</span>
+                </div>
+                <div class="stat">
+                    <span>現在の支援総額</span>
+                    <span>¥3,750,000</span>
+                </div>
+                <div class="stat">
+                    <span>支援者数</span>
+                    <span>250人</span>
+                </div>
+                <div class="stat">
+                    <span>残り期間</span>
+                    <span>15日</span>
+                </div>
+                <div class="rewards">
+                    <h3>リターン</h3>
+                    <div class="reward-card">
+                        <h4>¥3,000 エコバッグ・スターターセット</h4>
+                        <p>エコバッグ1個 + オリジナルステッカー</p>
+                    </div>
+                    <div class="reward-card">
+                        <h4>¥10,000 エコバッグ・プレミアムセット</h4>
+                        <p>エコバッグ3個 + オリジナルステッカー + お名前刺繍サービス</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+        </div>
+        <p>&copy; 2024 FUNDWAVE クラウドファンディングプラットフォーム. All rights reserved.</p>
+    </footer>
+</body>
+</html>
