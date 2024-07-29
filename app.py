@@ -64,16 +64,27 @@ def project(number):
                 SELECT *
                 FROM project
                 INNER JOIN user ON project.user_id = user.id
-                WHERE project_id = %s
+                WHERE project.project_id = %s
                 """, (number,))
     
     project_data = cur.fetchone()
     
     time_limit = (project_data[4] - today).days
     
+    cur.execute("""
+                SELECT *
+                FROM detail
+                WHERE project_id = %s
+                ORDER BY detail_order ASC
+                """, (number,))
+    
+    detail_data = cur.fetchall()
+    
     print(project_data)
     
-    return render_template("project.html", project_data = project_data, time_limit = time_limit)
+    print(detail_data)
+    
+    return render_template("project.html", project_data = project_data, time_limit = time_limit, detail_data = detail_data)
 
 @app.route("/login", methods=["GET","POST"])
 def login():
@@ -171,18 +182,28 @@ def new_project():
         end_date = request.form.get("end_date")
         top_file = request.files.get("top_file")
         sub_files = request.files.getlist("sub_file")
-        project_detail = request.form.get("project_detail")
+        # project_detail = request.form.getlist("project_detail")
 
         print(project_name)
         print(goal)
         print(end_date)
         print(top_file)
         print(sub_files)
+        # print(project_detail)
+        
+        
+        
+        
+        
+                    
+        # print(project_details)
+
         
         app.config["UPLOAD_FOLDER"] = "static/images/project_img"
 
         if not os.path.exists(app.config["UPLOAD_FOLDER"]):
             os.makedirs(app.config["UPLOAD_FOLDER"])
+        
         
         # 初期値の設定
         top_file_default = "default_top.png"
@@ -211,7 +232,7 @@ def new_project():
 
         file_save["sub_file"] = sub_file_li
         
-        print(file_save)
+        # print(file_save)
 
         
         conn = mysql.connector.connect(
@@ -235,24 +256,65 @@ def new_project():
                         sub_img2 VARCHAR(255),
                         sub_img3 VARCHAR(255),
                         sub_img4 VARCHAR(255),
-                        project_detail VARCHAR(500),
                         fund_money INT DEFAULT 0,
-                        support INT DEFAULT 0
+                        support INT DEFAULT 0,
+                        FOREIGN KEY (user_id) REFERENCES user(id)
                     )
                     """)
         
         cur.execute("""
                     INSERT INTO project 
-                    (user_id, project_name, goal, end_date, top_img, sub_img1, sub_img2, sub_img3, sub_img4, project_detail, fund_money) 
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    (user_id, project_name, goal, end_date, top_img, sub_img1, sub_img2, sub_img3, sub_img4, fund_money) 
+                    VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                     """, 
                     (1, project_name, goal, end_date, file_save["top_file"], 
-                     file_save["sub_file"][0], file_save["sub_file"][1], 
-                     file_save["sub_file"][2], file_save["sub_file"][3], project_detail, 0))
+                    file_save["sub_file"][0], file_save["sub_file"][1], 
+                    file_save["sub_file"][2], file_save["sub_file"][3], 0))
+        
+        cur.execute("SELECT LAST_INSERT_ID()")
+        last_insert_id = cur.fetchone()[0]
+        
+        cur.execute("""
+                            CREATE TABLE IF NOT EXISTS detail(
+                                detail_id INT AUTO_INCREMENT PRIMARY KEY,
+                                project_id INT,
+                                type CHAR(4),
+                                value VARCHAR(500),
+                                detail_order INT,
+                                FOREIGN KEY(project_id) REFERENCES project(project_id)
+                            )
+                            """)
+        
+        
+        
+        
+        # 詳細文
+        form_data = request.form
+        file_data = request.files
+        
+        for key, value in form_data.items():
+            if "project_detail-" in key:
+                print(f'Form data - {key}: {value}')
+                cur.execute("INSERT INTO detail(project_id,type,value,detail_order) VALUES(%s,'text',%s,%s)",(last_insert_id,value,key.split("-")[1]))
+        
+        for key, file in file_data.items():
+            if "project_detail-" in key:
+                print(f'File data - {key}: {file.filename}')
+            
+                
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                cur.execute("INSERT INTO detail(project_id,type,value,detail_order) VALUES(%s,'img',%s,%s)",(last_insert_id,file.filename,key.split("-")[1]))
+        
         
         conn.commit()
-        
     return render_template("new_project.html")
+
+
+@app.route("/support")
+def support():
+    
+    return render_template("support.html")
 
 
 if __name__ == "__main__":

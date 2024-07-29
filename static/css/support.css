@@ -1,0 +1,62 @@
+main {
+    
+}
+
+main article {
+
+}
+
+main article section {
+    width: 60vw;
+    margin: 0 auto;
+    padding: 1vh 1vw ;
+}
+
+main article section label {
+    width: 100%;
+    height: 40vh;
+    padding: 1vh 1vw;
+    border: 1px solid #000;
+    display: block;
+    margin: 5vh 0;
+}
+
+main article section label div {
+    display: flex;
+}
+
+main article section label .price {
+    height: 8vh;
+    font-size: 1.1vw;
+    line-height: 8vh;
+}
+
+main article section label .price input {
+    width: 1vw;
+}
+
+main article section label .price h2 {
+    margin-left: 0.5vw;
+}
+
+main article section label .detail {
+    width: 100%;
+    height: 30vh;
+}
+
+main article section label .detail p {
+    width: 60%;
+    font-size: 1.0vw;
+}
+
+main article section label .detail .return_img {
+    width: 40%;
+    height: 30vh;
+}
+
+main article section label .detail .return_img img {
+    display: block;
+    max-width: 100%;
+    height: 100%;
+    margin: 0 auto;
+}

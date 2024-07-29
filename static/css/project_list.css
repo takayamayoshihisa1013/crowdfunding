@@ -57,6 +57,7 @@ main article .now_project .project_row .project .project_select {
     border: none;
     top: 0;
     left: 0;
+    cursor: pointer;
     border-radius: 10px;
     transition: 0.4s;
 }

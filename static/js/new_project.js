@@ -39,4 +39,27 @@ document.addEventListener('DOMContentLoaded', function() {
             reader.readAsDataURL(event.target.files[0]);
         });
     });
+
+    const project_detail = document.querySelector(".project_detail");
+    var detail_count = 0;
+    document.getElementById("add_text").addEventListener("click", function() {
+
+        var new_textarea = document.createElement("textarea");
+        new_textarea.name = `project_detail-${detail_count}`;
+        new_textarea.id = "project_detail";
+        project_detail.appendChild(new_textarea)
+        detail_count++;
+    })
+
+    document.getElementById("add_img").addEventListener("click", function() {
+        var new_img = document.createElement("input");
+        new_img.type = "file";
+        new_img.id = "detail_img";
+        new_img.name = `project_detail-${detail_count}`;
+
+        project_detail.appendChild(new_img);
+
+        detail_count++;
+    })
+
 });

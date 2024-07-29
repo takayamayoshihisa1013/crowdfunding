@@ -30,10 +30,23 @@
                 <h1>{{ project_data.12 }}人</h1>
                 <h3><i class="fa-solid fa-clock"></i>募集終了まで</h3>
                 <h1>{{ time_limit }}日</h1>
-                <button>支援する</button>
+                <button><a href="/support">支援する</a></button>
             </div>
         </section>
         <!-- imgやpを一つの行として術つなぎの様に順番に並べていけば神？ -->
+        <section class="detail_section">
+            {% for detail in detail_data %}
+                {% if detail.2 == "img" %}
+                    <div class="detail_img">
+                        <img src="{{ url_for ('static', filename='images/project_img/' + detail.3) }}" alt="">
+                    </div>
+                {% else %}
+                    <div class="detail_text">
+                        <p>{{ detail.3 }}</p>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </section>
     </article>
 </main>
 {% endblock %}

@@ -6,7 +6,7 @@ main article {
     width: 85vw;
     background-color: #FFFF;
     margin: 0 auto;
-    padding-top: 5vh;
+    padding: 5vh 0;
 }
 
 main article .new_project {
@@ -126,4 +126,40 @@ main article section .detail h1 {
 
 main article section .detail .objective span{
     margin-right: 2vw;
+}
+
+.add_button {
+    display: flex;
+    width: 15vw;;
+    justify-content: space-between;
+}
+
+.add_button div {
+    width: 7vw;
+    height: 5vh;
+    background-color: #FFFF;
+    border: 0.15vw solid;
+    text-align: center;
+    line-height: 5vh;
+    transition: 0.4s;
+}
+
+.add_button div:hover {
+    background-color: #000;
+    color: #FFFF;
+}
+
+#submit {
+    display: block;
+    width: 12vw;
+    height: 8vh;
+    background-color: #ffff;
+    color: #000;
+    transition: 0.4s;
+    margin: 5vh auto;
+}
+
+#submit:hover {
+    background-color: #000;
+    color: #ffff;
 }

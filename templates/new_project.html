@@ -25,9 +25,16 @@
                     <h1>サブ画像を入力してください</h1>
                     <input type="file" class="sub_imgInput" name="sub_file"><input type="file" class="sub_imgInput" name="sub_file"><input type="file" class="sub_imgInput" name="sub_file"><input type="file" class="sub_imgInput" name="sub_file">
                     <h1>商品詳細</h1>
-                    <textarea name="project_detail" id="project_detail"></textarea>
-                    <button>文</button>
-                    <button>画像</button>
+                    <div class="project_detail">
+                        <!-- <textarea name="project_detail_text" id="project_detail"></textarea>
+                        <img src="" alt="project_detail_img"> -->
+                    </div>
+                    <div class="add_button">
+                        <div id="add_text">詳細文を追加</div>
+                        <div id="add_img">画像を追加</div>
+                    </div>
+                    
+                    
                 
             </section>
             <h1>サイトのプレビュー</h1>
@@ -54,7 +61,7 @@
                     <h1 id="endDate">39日</h1>
                 </div>
             </section>
-            <button type="submit" >登録</button>
+            <button type="submit" id="submit">登録</button>
         </form>
     </article>
 </main>
