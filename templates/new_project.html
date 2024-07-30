@@ -8,8 +8,9 @@
 
 {% block main %}
 <main>
-    <article>
-        <form action="/new_project" enctype="multipart/form-data" method="post">
+    <form action="/new_project" enctype="multipart/form-data" method="post">
+        <article>
+        
             <section class="new_project" id="new_project" >
                 
                     <h1>
@@ -37,8 +38,11 @@
                     
                 
             </section>
-            <h1>サイトのプレビュー</h1>
-            <h1 class="project_title"></h1>
+            <div id="preview_title">
+                <h1>サイトのプレビュー</h1>
+                <h1 class="project_title"></h1>
+            </div>
+            
             <section class="img_section">
                 <div class="img">
                     <div class="top_img">
@@ -61,9 +65,24 @@
                     <h1 id="endDate">39日</h1>
                 </div>
             </section>
+            <div id="next_button">リターンの設定へ進む</div>
+            <section id="return_section">
+                <h1>リターンの設定</h1>
+                    <h1>金額</h1>
+                    <div id="return">
+                        <input type="number" class="return_price-0" name="return_price-0">
+                        <textarea  name="return_textarea-0"></textarea>
+                        <input type="file" name="return_img-0">
+                    </div>
+                    <div id="return_add">
+                        <div id="return_add_button">リターンを追加する</div>
+                    </div>
+            </section>
             <button type="submit" id="submit">登録</button>
-        </form>
-    </article>
+        
+        </article>
+        
+    </form>
 </main>
 {% endblock %}
 

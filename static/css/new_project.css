@@ -9,6 +9,8 @@ main article {
     padding: 5vh 0;
 }
 
+
+
 main article .new_project {
     width: 80vw;
     margin: 0 auto;
@@ -25,14 +27,14 @@ main article .new_project h1 {
     margin: 0 auto;
 } */
 
-main article form .new_project input {
+main article  .new_project input {
     display: flex;
     height: 5vh;
     width: 100%;
     font-size: 1.1vw;
 }
 
-main article form .new_project #project_detail {
+main article .new_project #project_detail {
     width: 100%;
     height: 30vh;
     font-size: 1.2vw;
@@ -51,13 +53,13 @@ main article .project_title input {
     margin: 0 auto;
     font-size: 1.4vw;
 }
-
+/* 
 main article section {
     width: 85vw;
     margin: 0 auto;
     padding: 5vh 0;
     background-color: #FFFF;
-}
+} */
 
 main article .img_section {
     display: flex;
@@ -130,7 +132,7 @@ main article section .detail .objective span{
 
 .add_button {
     display: flex;
-    width: 15vw;;
+    width: 15vw;
     justify-content: space-between;
 }
 
@@ -149,8 +151,62 @@ main article section .detail .objective span{
     color: #FFFF;
 }
 
-#submit {
+#next_button {
+    width: 15vw;
+    height: 7vh;
+    border: 2px solid;
+    text-align: center;
+    line-height: 7vh;
     display: block;
+    transition: 0.4s;
+    margin: 5vh auto 0;
+}
+
+#next_button:hover {
+    background-color: #000;
+    color: #FFFF;
+}
+
+main article #return_section {
+    width: 80vw;
+    margin: 0 auto;
+    display: none;
+}
+
+#return input {
+    display: block;
+    width: 100%;
+    height: 5vh;
+    margin-bottom: 2vh;
+}
+
+#return textarea {
+    width: 100%;
+    height: 30vh;
+    font-size: 1.2vw;
+}
+
+#return_add {
+    width: 15vw;
+}
+
+#return_add #return_add_button {
+    width: 12vw;
+    height: 5vh;
+    background-color: #FFFF;
+    border: 0.15vw solid;
+    text-align: center;
+    line-height: 5vh;
+    transition: 0.4s;
+}
+
+#return_add #return_add_button:hover {
+    background-color: #000;
+    color: #FFFF;
+}
+
+#submit {
+    display: none;
     width: 12vw;
     height: 8vh;
     background-color: #ffff;
@@ -163,3 +219,5 @@ main article section .detail .objective span{
     background-color: #000;
     color: #ffff;
 }
+
+

@@ -60,3 +60,44 @@ main article section label .detail .return_img img {
     height: 100%;
     margin: 0 auto;
 }
+
+.button_div {
+    display: flex;
+    justify-content: space-around;
+    width: 35vw;
+    margin: 0 auto;
+}
+
+.button_div div {
+    width: 15vw;
+    background-color: #FFFF;
+    border: 0.15vw solid;
+    text-align: center;
+    height: 5vh;
+    font-size: 1.1vw;
+    font-weight: 400;
+    line-height: 5vh;
+    margin: 0 auto;
+}
+
+.button_div button {
+    width: 15vw;
+    background-color: #FFFF;
+    border: 0.15vw solid;
+    text-align: center;
+    height: 5.5vh;
+    line-height: 5.5vh;
+    margin: 0 auto;
+}
+
+#check {
+
+}
+
+#return {
+    display: none;
+}
+
+#support {
+    display: none;
+}

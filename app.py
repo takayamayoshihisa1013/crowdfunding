@@ -45,7 +45,7 @@ def project_list():
 
 @app.route("/project/<int:number>")
 def project(number):
-    session["before_page"] = "/project"
+    session["before_page"] = f"/project/{number}"
     
     print(number)
     
@@ -61,9 +61,10 @@ def project(number):
     today = date.today()
     
     cur.execute("""
-                SELECT *
+                SELECT project.*, user.id, SUM(project_return.return_price), COUNT(DISTINCT user_id)
                 FROM project
                 INNER JOIN user ON project.user_id = user.id
+                INNER JOIN project_return ON project.project_id = project_return.project_id
                 WHERE project.project_id = %s
                 """, (number,))
     
@@ -118,7 +119,12 @@ def login():
             session["id"] = user_data[0]
             session["user_name"] = user_data[1]
             
-            return redirect(session["before_page"])
+            if "before_page" in session:
+            
+                return redirect(session["before_page"])
+            
+            else:
+                return redirect("/")
         
         else:
             error = "メールアドレスまたは、パスワードが間違えています"
@@ -175,6 +181,11 @@ def sign_up():
 
 @app.route("/new_project", methods=["GET", "POST"])
 def new_project():
+    
+    session["before_page"] = "/new_project"
+    
+    if "id" not in session:
+        return redirect("/login")
     
     if request.method == "POST":
         project_name = request.form.get("project_name")
@@ -285,9 +296,6 @@ def new_project():
                             )
                             """)
         
-        
-        
-        
         # 詳細文
         form_data = request.form
         file_data = request.files
@@ -306,15 +314,122 @@ def new_project():
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 cur.execute("INSERT INTO detail(project_id,type,value,detail_order) VALUES(%s,'img',%s,%s)",(last_insert_id,file.filename,key.split("-")[1]))
         
+        cur.execute("""
+                    CREATE TABLE IF NOT EXISTS project_return(
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        project_id INT,
+                        return_price INT,
+                        return_detail VARCHAR(500),
+                        return_img VARCHAR(255),
+                        FOREIGN KEY (project_id) REFERENCES project(project_id)
+                    )
+                    """)
+        
+        print(form_data)
+        return_num = None
+        for key, value in form_data.items():
+            
+            # print(key, value)
+            
+            if "return_price-" in key:
+                return_num = key.split("-")[1]
+                return_price = value
+                # print(return_num)
+            
+            if return_num:
+            
+                if f"return_textarea-{return_num}" == key:
+                    return_text = value
+                    # print("text")
+                    
+                    for file_key, file in file_data.items():
+                        
+                        if f"return_img-{return_num}" == file_key:
+                            # return_img = file
+
+                            filename = secure_filename(file.filename)
+                            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                            
+                            print(return_num ,return_price, return_text, file.filename)
+                            
+                            cur.execute("INSERT INTO project_return(project_id,return_price,return_detail,return_img) VALUES (%s,%s,%s,%s)",
+                                        (last_insert_id, return_price, return_text, file.filename))
+                            
+                            return_num = None
+                            
+                
+                
+            else:
+                print("error")
+                
+            
+            
+            
+            
         
         conn.commit()
     return render_template("new_project.html")
 
 
-@app.route("/support")
-def support():
+@app.route("/return_select/<int:number>", methods=["GET", "POST"])
+def support(number):
+    session["before_page"] = f"/return_select/{number}"
+    print(number)
+    if "id" not in session:
+        return redirect("/login")
     
-    return render_template("support.html")
+    print(session)
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="",
+        database="crowdfundingsite"
+    )
+
+    cur = conn.cursor(session)
+
+    if request.method == "POST":
+        form_data = request.form.getlist("return_check")
+        print(form_data, "request.form")
+        
+        cur.execute("""
+                    CREATE TABLE IF NOT EXISTS support_user(
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        user_id INT,
+                        project_id INT,
+                        return_number INT,
+                        FOREIGN KEY (user_id) REFERENCES user(id),
+                        FOREIGN KEY (project_id) REFERENCES project(project_id),
+                        FOREIGN KEY (return_number) REFERENCES project_return(id)
+                    )
+                    """)
+        
+        for select in form_data:
+            cur.execute("INSERT INTO support_user(user_id,project_id,return_number) VALUES(%s,%s,%s)",
+                        (session["id"],number, select ))
+            
+        conn.commit()
+        
+        
+        # データベースに保存するなどの処理をここに追加
+
+    cur.execute("""
+                SELECT * 
+                FROM project_return
+                WHERE project_id = %s
+                ORDER BY return_price ASC
+                """, (number,))
+    
+    return_data = cur.fetchall()
+    # print(return_data)
+
+    cur.close()
+    conn.close()
+
+    return render_template("return.html", number=number, return_data=return_data)
+
+
 
 
 if __name__ == "__main__":

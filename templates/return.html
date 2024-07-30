@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/support.css') }}">
+{% endblock %}
+
+{% block title %}
+支援
+{% endblock %}
+
+{% block main %}
+<main>
+    <article>
+        <form action="/return_select/{{ number }}" method="post">
+            <section id="input">
+                <h1>リターンの選択</h1>
+                {% for data in return_data %}
+                <label>
+                    <div class="price">
+                        <input type="checkbox" name="return_check" value="{{ data.0 }}" id="plan-{{ loop.index }}">
+                        <h2>{{ data.2 }}円</h2>
+                    </div>
+                    <div class="detail">
+                        <p>{{ data.3 }}</p>
+                        <div class="return_img">
+                            <img src="{{ url_for('static', filename='images/project_img/' + data.4 ) }}" alt="">
+                        </div>
+                    </div>
+                </label>
+                {% endfor %}
+                <div class="button_div">
+                    <button id="check" type="button">確認に進む</button>
+                    <button id="return" type="button">選択へ戻る</button>
+                    <button id="support" type="submit">支援する</button>
+                </div>
+            </section>
+        </form>
+    </article>
+</main>
+{% endblock %}
+
+{% block javascript %}
+<script src="{{ url_for('static', filename='js/return.js') }}"></script>
+{% endblock %}
