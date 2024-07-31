@@ -5,4 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
             title.textContent = title.textContent.substring(0, 32) + "...";
         }
     });
+
+    
+
 });

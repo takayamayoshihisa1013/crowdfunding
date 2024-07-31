@@ -3,6 +3,7 @@ import mysql.connector
 import os
 from werkzeug.utils import secure_filename
 from datetime import datetime, timedelta, date
+from decimal import Decimal
 
 app = Flask(__name__)
 
@@ -23,10 +24,98 @@ def top():
     
     if "id" in session:
         login_data = True
+        print(session["id"])
     else:
         login_data = False
     
-    return render_template("top.html", login_data =login_data)
+    today = date.today()
+    
+    conn = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="crowdfundingsite"
+        )
+    
+    cur = conn.cursor()
+    
+    data = (
+    'user_name', 'project_name', 100, 'top_img', 1, Decimal('50'), 10, today
+    )
+    
+    project_my_data = []
+    
+    if login_data:
+        cur.execute("""
+                SELECT user.user_name, project.project_name, project.goal, project.top_img, project.project_id, SUM(project_return.return_price), COUNT(DISTINCT support_user.user_id), project.end_date
+                FROM project
+                INNER JOIN support_user ON project.project_id = support_user.project_id
+                INNER JOIN project_return ON support_user.return_number = project_return.id
+                INNER JOIN user ON user.id = project.user_id
+                WHERE user.id = %s
+                ORDER BY COUNT(DISTINCT support_user.user_id) DESC
+                LIMIT 4
+                """, (session["id"],))
+        
+        project_my_data = cur.fetchall()
+        
+        if project_my_data and None not in project_my_data[0]:
+            # 新しいリストを作成して、日付を日数に変換
+            updated_my_project_data = []
+            for data in project_my_data:
+                end_date = data[7]
+                days_left = (end_date - today).days
+                # 新しいタプルを作成して、元のデータをコピーし、7番目の要素を日数に置き換えます
+                percentage = float((data[5] / data[2]) * 100)
+                updated_my_data = data[:7] + (days_left,) + (percentage,)
+                updated_my_project_data.append(updated_my_data)
+
+            # 新しいリストを出力
+            for data in updated_my_project_data:
+                print(data)
+    
+            # もし project_data を更新したい場合は、新しいリストで置き換えます
+            project_my_data = updated_my_project_data
+            
+        else:
+            project_my_data = []
+        
+    cur.execute("""
+                SELECT user.user_name, project.project_name, project.goal, project.top_img, project.project_id, SUM(project_return.return_price), COUNT(DISTINCT support_user.user_id), project.end_date
+                FROM project
+                INNER JOIN support_user ON project.project_id = support_user.project_id
+                INNER JOIN project_return ON support_user.return_number = project_return.id
+                INNER JOIN user ON user.id = project.user_id
+                ORDER BY COUNT(DISTINCT support_user.user_id) DESC
+                LIMIT 4
+                """)
+    
+    project_data = cur.fetchall()
+
+    print(project_data)
+
+    if project_data and None not in project_data[0]:
+        # 新しいリストを作成して、日付を日数に変換
+        updated_project_data = []
+        for data in project_data:
+            end_date = data[7]
+            days_left = (end_date - today).days
+            # 新しいタプルを作成して、元のデータをコピーし、7番目の要素を日数に置き換えます
+            percentage = float((data[5] / data[2]) * 100)
+            updated_data = data[:7] + (days_left,) + (percentage,)
+            updated_project_data.append(updated_data)
+
+        # 新しいリストを出力
+        for data in updated_project_data:
+            print(data)
+    
+        # もし project_data を更新したい場合は、新しいリストで置き換えます
+        project_data = updated_project_data
+        
+    else:
+        project_data = []
+
+    return render_template("top.html", login_data=login_data, project_data=project_data, project_my_data=project_my_data)
 
 @app.route("/project_list")
 def project_list():
@@ -45,6 +134,10 @@ def project_list():
             password="",
             database="crowdfundingsite"
         )
+    
+    data = (
+    'user_name', 'project_name', 100, 'top_img', 1, Decimal('50'), 10, today
+    )
     
     cur = conn.cursor()
     
@@ -84,7 +177,8 @@ def project_list():
             end_date = data[7]
             days_left = (end_date - today).days
             # 新しいタプルを作成して、元のデータをコピーし、7番目の要素を日数に置き換えます
-            updated_data = data[:7] + (days_left,)
+            percentage = float((data[5] / data[2]) * 100)
+            updated_data = data[:7] + (days_left,) + (percentage,)
             updated_project_data.append(updated_data)
 
         # 新しいリストを出力
@@ -97,6 +191,7 @@ def project_list():
         
     else:
         project_data = None
+        
 
     return render_template("project_list.html", project_data = project_data, login_data =login_data)
 

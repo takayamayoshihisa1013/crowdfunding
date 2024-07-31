@@ -12,211 +12,133 @@
 <main>
     <article>
         <section class="preview">
+            <div class="top_text">
+                <h1 class="one">クラウドファンディングで</h1>
+                <h1 class="two">届かなかったものを手に入れよう</h1>
+                <button><a href="/new_project">プロジェクトを始める</a></button>
+            </div>
             <div class="slider">
-                <div><img src="./img/headerImg/img1.jpg" alt=""  class="div_img"></div>
-                <div><img src="./img/headerImg/img2.jpg" alt=""  class="div_img"></div>
-                <div><img src="./img/headerImg/img3.jpg" alt="" class="div_img"></div>
-                <div><img src="./img/headerImg/img5.jpg" alt="" class="div_img"></div>
-                <div><img src="./img/headerImg/img6.jpg" alt="" class="div_img"></div>
+                <div><img src="{{ url_for('static', filename='images/project_img/top1.avif') }}" alt=""  class="div_img"></div>
+                <div><img src="{{ url_for('static', filename='images/project_img/top2.avif') }}" alt=""  class="div_img"></div>
+                <div><img src="{{ url_for('static', filename='images/project_img/top3.avif') }}" alt=""  class="div_img"></div>
+                <div><img src="{{ url_for('static', filename='images/project_img/tp4.avif') }}" alt=""  class="div_img"></div>
             </div>
         </section>
         <section class="now_project">
+            {% if project_my_data %}
             <h2 class="section_title">あなたのプロジェクト</h2>
-            <div class="project_row">
-                <div class="project">
-                    <div class="project_image">
-                        <img src="static/images/1.avif" alt="">
-                    </div>
-                    <div class="company">
-                        <h3>株式会社るらりゆ</h3>
-                    </div>
-                    <div class="tag">
-                        <p><i class="fa-solid fa-tag"></i><button>環境</button></p>
-                    </div>
-                    <div class="bar">
-                        <div class="bar_back">
-                            <div class="bar_save"></div>
+            {% endif %}
+            <form>
+                {% if project_my_data %}
+                    {% for project in project_my_data %}
+
+                    {% if loop.index0 % 4 == 0 %}
+                    <div class="project_row">
+                    {% endif %}
+                        <div class="project">
+                            <button type="submit" class="project_select" value="{{project.4}}" formaction="/project/{{ project.4 }}"></button>
+                            <div class="project_image">
+                                <img src="static/images/project_img/{{ project.3 }}" alt="">
+                            </div>
+                            <div class="company">
+                                <h3>{{ project.0 }}</h3>
+                            </div>
+                            <div class="tag">
+                                <p><i class="fa-solid fa-tag"></i><button>環境</button></p>
+                            </div>
+                            <div class="bar">
+                                <div class="bar_back">
+                                    <div class="bar_save" style="width: {{ project.8 }}%;"></div>
+                                </div>
+                                <h3>{{ project.8 }}%</h3>
+                            </div>
+                            <div class="project_title">
+                                <h3>{{ project.1 }}</h3>
+                            </div>
+                            
+                            <div class="project_detail">
+                                <div class="now_money">
+                                    <h4>金額</h4>
+                                    <h3>￥{{ project.5 }}</h3>
+                                </div>
+                                <div class="people">
+                                    <h4>人数</h4>
+                                    <h3>{{ project.6 }}人</h3>
+                                </div>
+                                <div>
+                                    <h4>日数</h4>
+                                    <h3>{{ project.7 }}日</h3>
+                                </div>
+                            </div>
+                            
+                            
                         </div>
-                        <h3>80%</h3>
+                    {% if loop.index0 % 4 == 3 or loop.last %}
                     </div>
-                    <div class="project_title">
-                        <h3>革新的な100%生分解性エコバッグ</h3>
-                    </div>
-                    
-                    <div class="project_detail">
-                        <div class="now_money">
-                            <h4>金額</h4>
-                            <h3>￥20000</h3>
-                        </div>
-                        <div class="people">
-                            <h4>人数</h4>
-                            <h3>273人</h3>
-                        </div>
-                        <div>
-                            <h4>日数</h4>
-                            <h3>34日</h3>
-                        </div>
-                    </div>
-                    
-                    
-                </div>
+                    {% endif %}
+                    {% endfor %}
+
                 
-                <!-- 目標金額を分割してその金額まででできることをライブするさいとにする -->
-            </div>
+                {% endif %}
+            </form>
+
         </section>
         <section class="now_project">
             <h2 class="section_title">注目のプロジェクト</h2>
-            <div class="project_row">
-                <div class="project">
-                    <div class="project_image">
-                        <img src="static/images/1.avif" alt="">
-                    </div>
-                    <div class="company">
-                        <h3>株式会社るらりゆ</h3>
-                    </div>
-                    <div class="tag">
-                        <p><i class="fa-solid fa-tag"></i><button>環境</button></p>
-                    </div>
-                    <div class="bar">
-                        <div class="bar_back">
-                            <div class="bar_save"></div>
+            <form>
+                {% if project_data %}
+                    {% for project in project_data %}
+
+                    {% if loop.index0 % 4 == 0 %}
+                    <div class="project_row">
+                    {% endif %}
+                        <div class="project">
+                            <button type="submit" class="project_select" value="{{project.4}}" formaction="/project/{{ project.4 }}"></button>
+                            <div class="project_image">
+                                <img src="static/images/project_img/{{ project.3 }}" alt="">
+                            </div>
+                            <div class="company">
+                                <h3>{{ project.0 }}</h3>
+                            </div>
+                            <div class="tag">
+                                <p><i class="fa-solid fa-tag"></i><button>環境</button></p>
+                            </div>
+                            <div class="bar">
+                                <div class="bar_back">
+                                    <div class="bar_save" style="width: {{ project.8 }}%;"></div>
+                                </div>
+                                <h3>{{ project.8 }}%</h3>
+                            </div>
+                            <div class="project_title">
+                                <h3>{{ project.1 }}</h3>
+                            </div>
+                            
+                            <div class="project_detail">
+                                <div class="now_money">
+                                    <h4>金額</h4>
+                                    <h3>￥{{ project.5 }}</h3>
+                                </div>
+                                <div class="people">
+                                    <h4>人数</h4>
+                                    <h3>{{ project.6 }}人</h3>
+                                </div>
+                                <div>
+                                    <h4>日数</h4>
+                                    <h3>{{ project.7 }}日</h3>
+                                </div>
+                            </div>
+                            
+                            
                         </div>
-                        <h3>80%</h3>
+                    {% if loop.index0 % 4 == 3 or loop.last %}
                     </div>
-                    <div class="project_title">
-                        <h3>革新的な100%生分解性エコバッグ</h3>
-                    </div>
-                    
-                    <div class="project_detail">
-                        <div class="now_money">
-                            <h4>金額</h4>
-                            <h3>￥20000</h3>
-                        </div>
-                        <div class="people">
-                            <h4>人数</h4>
-                            <h3>273人</h3>
-                        </div>
-                        <div>
-                            <h4>日数</h4>
-                            <h3>34日</h3>
-                        </div>
-                    </div>
-                    
-                    
-                </div>
-                <div class="project">
-                    <div class="project_image">
-                        <img src="static/images/4.avif" alt="">
-                    </div>
-                    <div class="company">
-                        <h3>株式会社るらりゆ</h3>
-                    </div>
-                    <div class="tag">
-                        <p><i class="fa-solid fa-tag"></i><button>環境</button></p>
-                    </div>
-                    <div class="bar">
-                        <div class="bar_back">
-                            <div class="bar_save"></div>
-                        </div>
-                        <h3>80%</h3>
-                    </div>
-                    <div class="project_title">
-                        <h3>革新的な100%生分解性エコバッグ</h3>
-                    </div>
-                    
-                    <div class="project_detail">
-                        <div class="now_money">
-                            <h4>金額</h4>
-                            <h3>￥20000</h3>
-                        </div>
-                        <div class="people">
-                            <h4>人数</h4>
-                            <h3>273人</h3>
-                        </div>
-                        <div>
-                            <h4>日数</h4>
-                            <h3>34日</h3>
-                        </div>
-                    </div>
-                    
-                    
-                </div>
-                <div class="project">
-                    <div class="project_image">
-                        <img src="static/images/2.avif" alt="">
-                    </div>
-                    <div class="company">
-                        <h3>株式会社るらりゆ</h3>
-                    </div>
-                    <div class="tag">
-                        <p><i class="fa-solid fa-tag"></i><button>環境</button></p>
-                    </div>
-                    <div class="bar">
-                        <div class="bar_back">
-                            <div class="bar_save"></div>
-                        </div>
-                        <h3>80%</h3>
-                    </div>
-                    <div class="project_title">
-                        <h3>革新的な100%生分解性エコバッグ</h3>
-                    </div>
-                    
-                    <div class="project_detail">
-                        <div class="now_money">
-                            <h4>金額</h4>
-                            <h3>￥20000</h3>
-                        </div>
-                        <div class="people">
-                            <h4>人数</h4>
-                            <h3>273人</h3>
-                        </div>
-                        <div>
-                            <h4>日数</h4>
-                            <h3>34日</h3>
-                        </div>
-                    </div>
-                    
-                    
-                </div>
-                <div class="project">
-                    <div class="project_image">
-                        <img src="static/images/3.avif" alt="">
-                    </div>
-                    <div class="company">
-                        <h3>株式会社るらりゆ</h3>
-                    </div>
-                    <div class="tag">
-                        <p><i class="fa-solid fa-tag"></i><button>環境</button></p>
-                    </div>
-                    <div class="bar">
-                        <div class="bar_back">
-                            <div class="bar_save"></div>
-                        </div>
-                        <h3>80%</h3>
-                    </div>
-                    <div class="project_title">
-                        <h3>革新的な100%生分解性エコバッグ</h3>
-                    </div>
-                    
-                    <div class="project_detail">
-                        <div class="now_money">
-                            <h4>金額</h4>
-                            <h3>￥20000</h3>
-                        </div>
-                        <div class="people">
-                            <h4>人数</h4>
-                            <h3>273人</h3>
-                        </div>
-                        <div>
-                            <h4>日数</h4>
-                            <h3>34日</h3>
-                        </div>
-                    </div>
-                    
-                    
-                </div>
-                <!-- 目標金額を分割してその金額まででできることをライブするさいとにする -->
-            </div>
+                    {% endif %}
+                    {% endfor %}
+
+                {% else %}
+                    <h1 class="none_project">プロジェクトが見つかりませんでした</h1>
+                {% endif %}
+            </form>
         </section>
     </article>
 </main>
@@ -226,4 +148,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"></script>
     <script src="static/js/slick.js"></script>
+    <script src="static/js/project_list.js">
+
+    </script>
+    <script></script>
 {% endblock %}

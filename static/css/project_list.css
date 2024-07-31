@@ -132,7 +132,7 @@ main article .now_project .project_row .project .bar .bar_back {
 }
 
 main article .now_project .project_row .project .bar .bar_back .bar_save {
-    width: 80%;
+    /* width: 80%; */
     background-color: greenyellow;
     height: 100%;
     border-radius: 0.5vh;
