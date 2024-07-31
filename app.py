@@ -13,14 +13,31 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', "avif"}
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=1)
+
+
+
 @app.route("/")
 def top():
     session["before_page"] = "/"
-    return render_template("top.html")
+    
+    if "id" in session:
+        login_data = True
+    else:
+        login_data = False
+    
+    return render_template("top.html", login_data =login_data)
 
 @app.route("/project_list")
 def project_list():
     session["before_page"] = "/project_list"
+    
+    if "id" in session:
+        login_data = True
+    else:
+        login_data = False
+    
+    today = date.today()
     
     conn = mysql.connector.connect(
             host="localhost",
@@ -31,23 +48,68 @@ def project_list():
     
     cur = conn.cursor()
     
-    cur.execute("""
-                SELECT user_name, project_name, goal, top_img,fund_money, support, project_id
+    print(request.args)
+    
+    where = ""
+    
+    if "search" in request.args:
+        print("s")
+    
+        search_data = request.args.get("search").split()
+        print(search_data)
+    
+        for i in range(len(search_data)):
+            if i == 0:
+                where = f"WHERE project.project_name LIKE '%{search_data[i]}%'"
+            else:
+                where = f" AND project.project_name LIKE '%{search_data[i]}%'"
+        
+    cur.execute(f"""
+                SELECT user.user_name, project.project_name, project.goal, project.top_img, project.project_id, SUM(project_return.return_price), COUNT(DISTINCT support_user.user_id), project.end_date
                 FROM project
+                INNER JOIN support_user ON project.project_id = support_user.project_id
+                INNER JOIN project_return ON support_user.return_number = project_return.id
                 INNER JOIN user ON user.id = project.user_id
+                {where}
                 """)
     
     project_data = cur.fetchall()
-    
+
     print(project_data)
+
+    if None not in project_data[0]:
+        # 新しいリストを作成して、日付を日数に変換
+        updated_project_data = []
+        for data in project_data:
+            end_date = data[7]
+            days_left = (end_date - today).days
+            # 新しいタプルを作成して、元のデータをコピーし、7番目の要素を日数に置き換えます
+            updated_data = data[:7] + (days_left,)
+            updated_project_data.append(updated_data)
+
+        # 新しいリストを出力
+        for data in updated_project_data:
+            print(data)
     
-    return render_template("project_list.html", project_data = project_data)
+
+        # もし project_data を更新したい場合は、新しいリストで置き換えます
+        project_data = updated_project_data
+        
+    else:
+        project_data = None
+
+    return render_template("project_list.html", project_data = project_data, login_data =login_data)
 
 @app.route("/project/<int:number>")
 def project(number):
     session["before_page"] = f"/project/{number}"
     
     print(number)
+    
+    if "id" in session:
+        login_data = True
+    else:
+        login_data = False
     
     conn = mysql.connector.connect(
             host="localhost",
@@ -61,16 +123,37 @@ def project(number):
     today = date.today()
     
     cur.execute("""
-                SELECT project.*, user.id, SUM(project_return.return_price), COUNT(DISTINCT user_id)
-                FROM project
-                INNER JOIN user ON project.user_id = user.id
-                INNER JOIN project_return ON project.project_id = project_return.project_id
-                WHERE project.project_id = %s
+                SELECT 
+                    project.project_id, 
+                    project.project_name,
+                    project.goal,
+                    project.end_date,
+                    project.top_img,
+                    project.sub_img1,
+                    project.sub_img2,
+                    project.sub_img3,
+                    project.sub_img4,
+                    user.user_name,
+                    SUM(project_return.return_price) AS total_support_amount,
+                    COUNT(DISTINCT support_user.user_id) AS support_user_count
+                FROM 
+                    project
+                INNER JOIN 
+                    user ON project.user_id = user.id
+                INNER JOIN 
+                    support_user ON project.project_id = support_user.project_id
+                INNER JOIN 
+                    project_return ON support_user.return_number = project_return.id
+                WHERE 
+                    project.project_id = %s
+                GROUP BY 
+                    project.project_id;
+
                 """, (number,))
     
     project_data = cur.fetchone()
     
-    time_limit = (project_data[4] - today).days
+    time_limit = (project_data[3] - today).days
     
     cur.execute("""
                 SELECT *
@@ -85,10 +168,16 @@ def project(number):
     
     print(detail_data)
     
-    return render_template("project.html", project_data = project_data, time_limit = time_limit, detail_data = detail_data)
+    return render_template("project.html", project_data = project_data, time_limit = time_limit, detail_data = detail_data, login_data =login_data)
 
 @app.route("/login", methods=["GET","POST"])
 def login():
+    
+    
+    if "id" in session:
+        login_data = True
+    else:
+        login_data = False
     
     
     if request.method == "POST":
@@ -130,10 +219,15 @@ def login():
             error = "メールアドレスまたは、パスワードが間違えています"
             return render_template("login.html", error = error)
     
-    return render_template("login.html")
+    return render_template("login.html", login_data =login_data)
 
 @app.route("/sign_up", methods=["GET", "POST"])
 def sign_up():
+    
+    if "id" in session:
+        login_data = True
+    else:
+        login_data = False
     
     if request.method == "POST":
         print("post")
@@ -177,15 +271,22 @@ def sign_up():
         
         
         
-    return render_template("sign_up.html")
+    return render_template("sign_up.html", login_data =login_data)
 
 @app.route("/new_project", methods=["GET", "POST"])
 def new_project():
     
     session["before_page"] = "/new_project"
     
+    
+    
     if "id" not in session:
         return redirect("/login")
+    
+    if "id" in session:
+        login_data = True
+    else:
+        login_data = False
     
     if request.method == "POST":
         project_name = request.form.get("project_name")
@@ -368,7 +469,7 @@ def new_project():
             
         
         conn.commit()
-    return render_template("new_project.html")
+    return render_template("new_project.html", login_data =login_data)
 
 
 @app.route("/return_select/<int:number>", methods=["GET", "POST"])
@@ -377,6 +478,11 @@ def support(number):
     print(number)
     if "id" not in session:
         return redirect("/login")
+    
+    if "id" in session:
+        login_data = True
+    else:
+        login_data = False
     
     print(session)
 
@@ -427,9 +533,66 @@ def support(number):
     cur.close()
     conn.close()
 
-    return render_template("return.html", number=number, return_data=return_data)
+    return render_template("return.html", number=number, return_data=return_data, login_data =login_data)
 
+@app.route("/my_project_list")
+def my_project():
+    session["before_page"] = "/project_list"
+    
+    if "id" in session:
+        login_data = True
+    else:
+        login_data = False
+    
+    today = date.today()
+    
+    conn = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="crowdfundingsite"
+        )
+    
+    cur = conn.cursor()
+    
+    
+    
+    
+    cur.execute(f"""
+                SELECT user.user_name, project.project_name, project.goal, project.top_img, project.project_id, SUM(project_return.return_price), COUNT(DISTINCT support_user.user_id), project.end_date
+                FROM project
+                INNER JOIN support_user ON project.project_id = support_user.project_id
+                INNER JOIN project_return ON support_user.return_number = project_return.id
+                INNER JOIN user ON user.id = project.user_id
+                WHERE user.id = %s
+                """, (session["id"],))
+    
+    project_data = cur.fetchall()
 
+    print(project_data)
+
+    if None not in project_data[0]:
+        # 新しいリストを作成して、日付を日数に変換
+        updated_project_data = []
+        for data in project_data:
+            end_date = data[7]
+            days_left = (end_date - today).days
+            # 新しいタプルを作成して、元のデータをコピーし、7番目の要素を日数に置き換えます
+            updated_data = data[:7] + (days_left,)
+            updated_project_data.append(updated_data)
+
+        # 新しいリストを出力
+        for data in updated_project_data:
+            print(data)
+    
+
+        # もし project_data を更新したい場合は、新しいリストで置き換えます
+        project_data = updated_project_data
+        
+    else:
+        project_data = None
+
+    return render_template("my_project_list.html", project_data = project_data, login_data =login_data)
 
 
 if __name__ == "__main__":

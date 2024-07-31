@@ -11,12 +11,7 @@
     <article>
         <section class="now_project">
             <!-- <h2 class="section_title"></h2> -->
-            <form action="/project">
-                <div id="search">
-                    <input type="text" placeholder="検索したいキーワード、またはタグを入力してください" name="search">
-                    <button type="submit" name="search_button" value="search_project" formaction="/project_list">検索</button>
-                </div>
-            </form>
+            
             <form>
                 {% if project_data %}
                     {% for project in project_data %}
@@ -68,7 +63,7 @@
                     {% endfor %}
 
                 {% else %}
-                    <h1 class="none_project">プロジェクトが見つかりませんでした</h1>
+                    <h1 class="none_project">まだプロジェクトを作っていません</h1>
                 {% endif %}
             </form>
 

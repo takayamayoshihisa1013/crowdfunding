@@ -1,3 +1,7 @@
+main {
+    min-height: 67vh;
+}
+
 main article #search {
     width: 45vw;
     height: 5vh;
@@ -159,4 +163,12 @@ main article .now_project .project_row .project .project_detail div h3 {
 main article .now_project .project_row .project .project_detail div h4 {
     font-size: 0.9vw;
     font-weight: 300;
+}
+
+
+.none_project {
+    text-align: center;
+    font-size: 1.5vw;
+    color: gray;
+    margin-top: 5vh;
 }

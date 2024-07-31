@@ -39,7 +39,7 @@ header #logo h1 {
 }
 
 header nav {
-    width: 25vw;
+    width: 35vw;
     height: 5vh;
     margin: 4vh 0;
 }
@@ -57,3 +57,43 @@ header nav ul li {
 }
 
 
+footer {
+    width: 80%;
+    padding: 2vh 10%;
+    display: flex;
+    justify-content: space-around;
+    background-color:#f5f5f5;
+    margin: 0 auto;
+    height: 15vh;
+}
+
+footer #logo {
+    width: 20vw;
+    height: 10vh;
+    margin: 1.5vh 0;
+    color: aquamarine;
+    font-family: 'Sacramento', cursive;
+}
+
+footer nav ul {
+    display: flex;
+    width: 35vw;
+    justify-content: space-around;
+    list-style: none;
+    height: 5vh;
+    line-height: 5vh;
+}
+
+footer nav ul li {
+    width: calc(35vw / 4);
+    text-align: center;
+    font-size: 1.1vw;
+    font-weight: 600;
+}
+
+footer nav ul li a {
+    width: 100%;
+    display: block;
+    height: 100%;
+    margin: 2.5vh auto;
+}

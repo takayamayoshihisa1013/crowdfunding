@@ -1,8 +1,10 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const titles = document.querySelectorAll(".project_title h3");
-    titles.forEach(title => {
-        if (title.textContent.length > 32) {
-            title.textContent = title.textContent.substring(0, 32) + "...";
-        }
-    });
-});
+    const top_img = document.querySelector(".top_img img");
+    const sub_imgs = document.querySelectorAll(".sub_img img");
+
+    sub_imgs.forEach(function(sub_img) {
+        sub_img.addEventListener("click", function() {
+            top_img.src = sub_img.src;
+        })
+    })
+})

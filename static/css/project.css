@@ -65,6 +65,7 @@ main article section .img  ul li img {
     max-height: 100%;
     display: block;
     margin: 0 auto;
+    cursor: pointer;
 }
 
 main article section .detail {
